@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="author" content="Genaro_Perez">
+<meta name="application-name" content="GastosPro">
+<meta name="theme-color" content="#16212C">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>GastosPro</title>
+<!-- GastosPro · by Genaro_Perez -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="bar">
+  <button class="rend-pick" id="rendPick" aria-label="Cambiar rendición">
+    <span class="rp-name" id="rpName">GastosPro</span>
+    <span class="rp-sub" id="rpSub"></span>
+  </button>
+  <div class="bar-total" id="barTotal"></div>
+  <button class="icon-btn" id="btnMenu" aria-label="Ajustes">
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9.4 4.9-.1-1.8 2-1.6-2-3.4-2.4.8a8 8 0 0 0-1.6-.9L16.9 3h-3.9l-.5 2.4c-.6.2-1.1.5-1.6.9l-2.4-.8-2 3.4 2 1.6v1.8l-2 1.6 2 3.4 2.4-.8c.5.4 1 .7 1.6.9l.5 2.4h3.9l.4-2.4c.6-.2 1.1-.5 1.6-.9l2.4.8 2-3.4-2-1.6Z"/></svg>
+  </button>
+</header>
+
+<!-- ============ LISTA DE GASTOS ============ -->
+<main id="vHome" class="view">
+  <div id="banner"></div>
+  <div id="list" class="list"></div>
+</main>
+
+<!-- ============ REVISAR / EDITAR GASTO ============ -->
+<section id="vEdit" class="view sheet" hidden>
+  <header class="sheet-head">
+    <button class="link" id="eCancel">Cancelar</button>
+    <h2 id="eTitle">Nueva boleta</h2>
+    <button class="link strong" id="eSave">Guardar</button>
+  </header>
+  <div class="edit-body">
+    <figure class="photo" id="ePhotoBox">
+      <img id="ePhoto" alt="Foto de la boleta">
+      <figcaption id="eStatus" class="status"></figcaption>
+    </figure>
+
+    <div class="amount-row">
+      <label class="amount"><span>Monto</span>
+        <input id="fMonto" inputmode="numeric" autocomplete="off" placeholder="0"></label>
+      <label class="cur"><span>Moneda</span>
+        <select id="fMoneda"><option>$</option><option>USD</option><option>EUR</option></select></label>
+    </div>
+    <div class="grid2">
+      <label><span>Fecha</span><input id="fFecha" type="date"></label>
+      <label><span>Ciudad</span><input id="fCiudad" list="dlComunas" autocomplete="off" placeholder="Comuna"></label>
+    </div>
+    <label><span>Comercio</span><input id="fComercio" list="dlComercios" autocomplete="off" placeholder="Ej.: COPEC, SODIMAC, PRONTO"></label>
+
+    <fieldset><legend>Categoría</legend><div class="chips" id="cCat"></div></fieldset>
+    <fieldset><legend>Línea / centro de costo</legend><div class="chips" id="cLinea"></div></fieldset>
+    <fieldset><legend>Forma de pago</legend><div class="chips" id="cForma"></div></fieldset>
+
+    <label><span>Detalle en la planilla</span><input id="fDetalle" autocomplete="off" class="detalle"></label>
+    <p class="hint" id="detHint">Se arma solo con categoría, comercio y ciudad. Si lo escribes a mano, se respeta.</p>
+    <label><span>Nota (no va a la planilla)</span><input id="fNota" autocomplete="off" placeholder="Opcional"></label>
+    <p class="meta" id="eMeta"></p>
+    <div id="eDanger"></div>
+  </div>
+</section>
+
+<!-- ============ RENDICIÓN ============ -->
+<section id="vRend" class="view sheet" hidden>
+  <header class="sheet-head">
+    <button class="link" id="rBack">Volver</button>
+    <h2>Rendición</h2>
+    <span></span>
+  </header>
+  <div class="edit-body" id="rBody"></div>
+</section>
+
+<!-- ============ AJUSTES ============ -->
+<section id="vSet" class="view sheet" hidden>
+  <header class="sheet-head">
+    <button class="link" id="sBack">Volver</button>
+    <h2>Ajustes</h2>
+    <span></span>
+  </header>
+  <div class="edit-body" id="sBody"></div>
+</section>
+
+<!-- botón principal -->
+<nav class="dock" id="dock">
+  <button class="dock-side" id="btnManual">Sin boleta</button>
+  <button class="cam" id="btnCam" aria-label="Fotografiar boleta">
+    <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9Zm3 5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/></svg>
+    <span>Boleta</span>
+  </button>
+  <button class="dock-side" id="btnGal">Galería</button>
+</nav>
+<input type="file" id="inCam" accept="image/*" capture="environment" hidden>
+<input type="file" id="inGal" accept="image/*" multiple hidden>
+
+<datalist id="dlComunas"></datalist>
+<datalist id="dlComercios"></datalist>
+
+<dialog id="dlg"><div id="dlgBody"></div></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<div id="busy" class="busy" hidden><div class="busy-card"><div class="spin"></div><p id="busyText">Leyendo boleta…</p></div></div>
+
+<footer class="sign">GastosPro · by Genaro_Perez</footer>
+<script src="lib/jszip.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
